@@ -519,15 +519,25 @@ def api_theme():
     return jsonify({'status': 'error'}), 400
 
 # ============================================
-# RUN APPLICATION
+# RUN APPLICATION (Production Ready)
 # ============================================
 
 if __name__ == '__main__':
-    print("🌍 Initializing WanderLog Travel Planner...")
+    import os
+    
+    # Initialize database
     init_database()
-    print("=" * 50)
-    print("🚀 Starting server at http://127.0.0.1:5000")
-    print("📱 Open your browser and go to: http://127.0.0.1:5000")
-    print("🎨 Theme toggle works via Python cookies (no JavaScript needed!)")
-    print("=" * 50)
-    app.run(debug=True, host='127.0.0.1', port=5000)
+    
+    # Get port from Render environment variable
+    port = int(os.environ.get('PORT', 5000))
+    
+    print("=" * 60)
+    print("🌍 WanderLog Travel Planner")
+    print("=" * 60)
+    print(f"🚀 Server starting on port {port}...")
+    print(f"📍 Binding to 0.0.0.0:{port}")
+    print("📱 Open your browser at the Render URL")
+    print("=" * 60)
+    
+    # Run on 0.0.0.0 for Render deployment
+    app.run(host='0.0.0.0', port=port, debug=False)
