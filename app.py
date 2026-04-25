@@ -45,45 +45,78 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+
 def init_database():
+    """
+    Initialize database with tables and sample data.
+    Uses proper error handling and date-based status calculation.
+    """
     conn = get_db_connection()
     cursor = conn.cursor()
     
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS trips (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            destination TEXT NOT NULL,
-            country TEXT NOT NULL,
-            start_date TEXT NOT NULL,
-            end_date TEXT NOT NULL,
-            travelers INTEGER DEFAULT 1,
-            budget REAL DEFAULT 0,
-            trip_type TEXT DEFAULT 'Leisure',
-            notes TEXT,
-            status TEXT DEFAULT 'Upcoming',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
-    
-    cursor.execute('SELECT COUNT(*) FROM trips')
-    count = cursor.fetchone()[0]
-    
-    if count == 0:
-        sample_trips = [
-            ('Goa', 'India', '2026-05-15', '2026-05-20', 2, 25000, 'Leisure', 'Beach vacation with friends', 'Upcoming'),
-            ('Manali', 'India', '2026-06-10', '2026-06-17', 4, 45000, 'Adventure', 'Trekking and snow activities', 'Upcoming'),
-            ('Jaipur', 'India', '2026-04-01', '2026-04-05', 2, 18000, 'Heritage', 'Palace and fort visits', 'Completed'),
-            ('Kerala', 'India', '2026-07-20', '2026-07-27', 2, 35000, 'Honeymoon', 'Backwaters and houseboat', 'Upcoming'),
-            ('Mumbai', 'India', '2026-03-10', '2026-03-12', 1, 12000, 'Business', 'Client meetings', 'Completed')
-        ]
-        cursor.executemany('''
-            INSERT INTO trips (destination, country, start_date, end_date, travelers, budget, trip_type, notes, status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', sample_trips)
-    
-    conn.commit()
-    conn.close()
-    print("✅ Database initialized!")
+    try:
+        # Create trips table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS trips (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                destination TEXT NOT NULL,
+                country TEXT NOT NULL,
+                start_date TEXT NOT NULL,
+                end_date TEXT NOT NULL,
+                travelers INTEGER DEFAULT 1,
+                budget REAL DEFAULT 0,
+                trip_type TEXT DEFAULT 'Leisure',
+                notes TEXT,
+                status TEXT DEFAULT 'Upcoming',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        
+        # Check if data already exists
+        cursor.execute('SELECT COUNT(*) FROM trips')
+        count = cursor.fetchone()[0]
+        
+        if count == 0:
+            # Use current year for sample data (always fresh)
+            from datetime import date
+            year = date.today().year
+            
+            sample_trips = [
+                ('Goa', 'India', f'{year}-05-15', f'{year}-05-20', 2, 25000, 'Leisure', 
+                 'Beach vacation with friends', 'Upcoming'),
+                ('Manali', 'India', f'{year}-06-10', f'{year}-06-17', 4, 45000, 'Adventure', 
+                 'Trekking and snow activities', 'Upcoming'),
+                ('Jaipur', 'India', f'{year}-04-01', f'{year}-04-05', 2, 18000, 'Heritage', 
+                 'Palace and fort visits', 'Completed'),
+                ('Kerala', 'India', f'{year}-07-20', f'{year}-07-27', 2, 35000, 'Honeymoon', 
+                 'Backwaters and houseboat stay', 'Upcoming'),
+                ('Mumbai', 'India', f'{year}-03-10', f'{year}-03-12', 1, 12000, 'Business', 
+                 'Client meetings', 'Completed'),
+                ('Shimla', 'India', f'{year}-12-20', f'{year}-12-25', 2, 30000, 'Leisure', 
+                 'Winter vacation and snow experience', 'Upcoming'),
+                ('Varanasi', 'India', f'{year}-08-05', f'{year}-08-08', 1, 15000, 'Spiritual', 
+                 'Ganga aarti and temple visits', 'Upcoming'),
+                ('Rishikesh', 'India', f'{year}-09-15', f'{year}-09-20', 3, 22000, 'Adventure', 
+                 'River rafting and yoga retreat', 'Upcoming'),
+            ]
+            
+            cursor.executemany('''
+                INSERT INTO trips (destination, country, start_date, end_date, 
+                                   travelers, budget, trip_type, notes, status)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', sample_trips)
+            
+            print(f"✅ Added {len(sample_trips)} sample trips!")
+        
+        conn.commit()
+        print("✅ Database initialized successfully!")
+        
+    except Exception as e:
+        print(f"❌ Database initialization error: {e}")
+        conn.rollback()
+        
+    finally:
+        conn.close()
 
 # ============================================
 # PYTHON HELPER FUNCTIONS (ALL LOGIC HERE)
