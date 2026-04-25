@@ -1,27 +1,4 @@
 # 🌍 WanderLog - Travel Planner
-
-## Task 2 Submission - Kinetrexa Software Python Internship
-
-**Intern Name:** [Your Name]  
-**Application ID:** B4YRR8PT  
-**Domain:** Python Development  
-**Date:** April 2026
-
----
-
-## 📸 Screenshots
-
-### Dashboard View
-![Dashboard](screenshots/dashboard.png)
-
-### Trip Details Page
-![Trip Details](screenshots/details.png)
-
-### Add Trip Form
-![Add Trip](screenshots/add-trip.png)
-
----
-
 ## ✨ Features
 
 - **Beautiful Dashboard:** Overview of all trips with statistics
