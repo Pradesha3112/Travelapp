@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}{{ trip.destination }} - WanderLog{% endblock %}
+{% block content %}
+<div class="detail-container">
+    <div class="detail-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <a href="{{ url_for('dashboard') }}" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+            <div class="detail-title">
+                <h1>{{ trip.destination }}</h1>
+                <p>{{ trip.country }} • {{ trip.trip_type }}</p>
+                <div class="status-badge status-{{ trip.status.lower() }}">{{ trip.status }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="detail-grid">
+            <div class="detail-main">
+                <div class="info-card">
+                    <h2><i class="fas fa-info-circle"></i> Trip Overview</h2>
+                    <div class="info-grid">
+                        <div class="info-item"><i class="far fa-calendar"></i> <strong>Dates:</strong> {{ trip.start_date }} to {{ trip.end_date }}</div>
+                        <div class="info-item"><i class="far fa-clock"></i> <strong>Duration:</strong> {{ duration }} days</div>
+                        <div class="info-item"><i class="fas fa-users"></i> <strong>Travelers:</strong> {{ trip.travelers }}</div>
+                        <div class="info-item"><i class="fas fa-rupee-sign"></i> <strong>Total Budget:</strong> ₹{{ "%.0f"|format(trip.budget) }}</div>
+                    </div>
+                    {% if days_until > 0 %}
+                    <div class="countdown-card"><i class="fas fa-hourglass-half"></i> <strong>{{ days_until }} days</strong> until your trip!</div>
+                    {% elif days_until == 0 %}
+                    <div class="countdown-card highlight">🎉 Your trip is today! Have a great journey!</div>
+                    {% endif %}
+                </div>
+                <div class="info-card">
+                    <h2><i class="fas fa-chart-pie"></i> Budget Breakdown</h2>
+                    <div class="budget-grid">
+                        <div class="budget-item"><span>🏨 Accommodation (35%)</span><span>₹{{ "%.0f"|format(budget_breakdown.accommodation) }}</span></div>
+                        <div class="budget-item"><span>🍽️ Food (25%)</span><span>₹{{ "%.0f"|format(budget_breakdown.food) }}</span></div>
+                        <div class="budget-item"><span>🚗 Transport (20%)</span><span>₹{{ "%.0f"|format(budget_breakdown.transport) }}</span></div>
+                        <div class="budget-item"><span>🎯 Activities (15%)</span><span>₹{{ "%.0f"|format(budget_breakdown.activities) }}</span></div>
+                        <div class="budget-item"><span>🏥 Emergency (5%)</span><span>₹{{ "%.0f"|format(budget_breakdown.emergency) }}</span></div>
+                        <div class="budget-item highlight"><span>💰 Daily Budget</span><span>₹{{ "%.0f"|format(budget_breakdown.daily_budget) }}/day</span></div>
+                        <div class="budget-item highlight"><span>👤 Per Person</span><span>₹{{ "%.0f"|format(budget_breakdown.per_person) }}</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-sidebar">
+                <div class="info-card weather-card">
+                    <h2><i class="fas fa-cloud-sun"></i> Weather Forecast</h2>
+                    <div class="weather-display">{{ weather }}</div>
+                </div>
+                <div class="info-card">
+                    <h2><i class="fas fa-suitcase"></i> Packing List</h2>
+                    <ul class="packing-list">
+                        <li><strong>📋 Essentials:</strong> {{ packing_list.essentials|join(', ') }}</li>
+                        <li><strong>👕 Clothing:</strong> {{ packing_list.clothing|join(', ') }}</li>
+                        <li><strong>🧴 Toiletries:</strong> {{ packing_list.toiletries|join(', ') }}</li>
+                        <li><strong>💊 Health:</strong> {{ packing_list.health|join(', ') }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="detail-grid">
+            <div class="info-card">
+                <h2><i class="fas fa-map-marker-alt"></i> Top Attractions</h2>
+                <ul class="attractions-list">
+                    {% for attraction in attractions %}<li>{{ attraction }}</li>{% endfor %}
+                </ul>
+            </div>
+            <div class="info-card">
+                <h2><i class="fas fa-lightbulb"></i> Travel Tips</h2>
+                <ul class="tips-list">
+                    {% for tip in tips %}<li><i class="fas fa-check-circle"></i> {{ tip }}</li>{% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="detail-actions">
+            <a href="{{ url_for('edit_trip', trip_id=trip.id) }}" class="btn btn-primary"><i class="fas fa-edit"></i> Edit Trip</a>
+            <form action="{{ url_for('delete_trip', trip_id=trip.id) }}" method="POST" style="display: inline;">
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Delete this trip?')"><i class="fas fa-trash"></i> Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

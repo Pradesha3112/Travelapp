@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Add New Trip - WanderLog{% endblock %}
+{% block content %}
+<div class="container form-container">
+    <div class="form-card">
+        <div class="form-header">
+            <i class="fas fa-map-marked-alt"></i>
+            <h1>Add New Adventure</h1>
+            <p>Plan your next unforgettable journey</p>
+        </div>
+        <form method="POST" class="trip-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-map-pin"></i> Destination *</label>
+                    <input type="text" name="destination" required placeholder="e.g., Goa, Manali, Paris">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-flag"></i> Country *</label>
+                    <select name="country" required>
+                        <option value="">Select Country</option>
+                        <option value="India">🇮🇳 India</option>
+                        <option value="USA">🇺🇸 USA</option>
+                        <option value="UK">🇬🇧 UK</option>
+                        <option value="France">🇫🇷 France</option>
+                        <option value="Italy">🇮🇹 Italy</option>
+                        <option value="Japan">🇯🇵 Japan</option>
+                        <option value="Thailand">🇹🇭 Thailand</option>
+                        <option value="UAE">🇦🇪 UAE</option>
+                        <option value="Singapore">🇸🇬 Singapore</option>
+                        <option value="Australia">🇦🇺 Australia</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="far fa-calendar-alt"></i> Start Date *</label>
+                    <input type="date" name="start_date" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="far fa-calendar-check"></i> End Date *</label>
+                    <input type="date" name="end_date" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-users"></i> Travelers</label>
+                    <input type="number" name="travelers" min="1" max="20" value="2">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-rupee-sign"></i> Budget (₹)</label>
+                    <input type="number" name="budget" min="0" step="1000" placeholder="25000">
+                </div>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-suitcase"></i> Trip Type *</label>
+                <select name="trip_type" required>
+                    <option value="Leisure">🏖️ Leisure</option>
+                    <option value="Adventure">🏔️ Adventure</option>
+                    <option value="Business">💼 Business</option>
+                    <option value="Honeymoon">💑 Honeymoon</option>
+                    <option value="Solo">🧳 Solo</option>
+                    <option value="Family">👨‍👩‍👧‍👦 Family</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-sticky-note"></i> Notes (Optional)</label>
+                <textarea name="notes" rows="4" placeholder="Any special plans, reminders..."></textarea>
+            </div>
+            <div class="form-actions">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Trip
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

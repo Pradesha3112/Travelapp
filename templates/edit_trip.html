@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Edit {{ trip.destination }} - WanderLog{% endblock %}
+{% block content %}
+<div class="container form-container">
+    <div class="form-card">
+        <div class="form-header">
+            <i class="fas fa-edit"></i>
+            <h1>Edit Trip</h1>
+            <p>Update your travel plans for {{ trip.destination }}</p>
+        </div>
+        <form method="POST" class="trip-form">
+            <div class="form-row">
+                <div class="form-group"><label>Destination *</label><input type="text" name="destination" value="{{ trip.destination }}" required></div>
+                <div class="form-group"><label>Country *</label><select name="country" required><option value="{{ trip.country }}" selected>{{ trip.country }}</option><option value="India">India</option><option value="USA">USA</option><option value="UK">UK</option></select></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Start Date *</label><input type="date" name="start_date" value="{{ trip.start_date }}" required></div>
+                <div class="form-group"><label>End Date *</label><input type="date" name="end_date" value="{{ trip.end_date }}" required></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Travelers</label><input type="number" name="travelers" min="1" max="20" value="{{ trip.travelers }}"></div>
+                <div class="form-group"><label>Budget (₹)</label><input type="number" name="budget" min="0" step="1000" value="{{ trip.budget }}"></div>
+            </div>
+            <div class="form-group"><label>Trip Type *</label><select name="trip_type" required><option value="{{ trip.trip_type }}" selected>{{ trip.trip_type }}</option><option value="Leisure">Leisure</option><option value="Adventure">Adventure</option><option value="Business">Business</option></select></div>
+            <div class="form-group"><label>Notes</label><textarea name="notes" rows="4">{{ trip.notes if trip.notes else '' }}</textarea></div>
+            <div class="form-actions">
+                <a href="{{ url_for('trip_detail', trip_id=trip.id) }}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Update Trip</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
